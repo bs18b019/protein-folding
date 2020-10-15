@@ -1,0 +1,386 @@
+
+import matplotlib.pyplot as plt
+import random
+
+def intn(ps,r,n,m,energy):
+
+    #here n-first residue by which it is interacting
+    #here- m-second residue by which it is interaction
+    #here r-residue which is interacting
+    #here energy is the interacton energy between residue
+    up=0
+    lf=0
+    dn=0
+    rt=0
+    #r=0
+    #n=4
+    #m=12
+    if n==100:
+        a=[0,0,0,0,0,0]
+
+        return(random.sample(population=a, k=1))
+    if n!=100 and m!=100:
+
+        if [ps[r][0],ps[r][1]+1]==[ps[m][0],ps[m][1]]:
+            up=1
+            if [ps[r][0]+1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                rt=1
+            elif [ps[r][0],ps[r][1]-1]==[ps[n][0],ps[n][1]]:
+                dn=1
+            elif [ps[r][0]-1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                lf=1
+        elif [ps[r][0]+1,ps[r][1]]==[ps[m][0],ps[m][1]]:
+            rt=1
+            if [ps[r][0],ps[r][1]+1]==[ps[n][0],ps[n][1]]:
+                up=1
+            elif [ps[r][0],ps[r][1]-1]==[ps[n][0],ps[n][1]]:
+                dn=1
+            elif [ps[r][0]-1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                lf=1
+        elif [ps[r][0],ps[r][1]-1]==[ps[m][0],ps[m][1]]:
+            dn=1
+            if [ps[r][0],ps[r][1]+1]==[ps[n][0],ps[n][1]]:
+                up=1
+            elif [ps[r][0]+1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                rt=1
+            elif [ps[r][0]-1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                lf=1
+        elif [ps[r][0]-1,ps[r][1]]==[ps[m][0],ps[m][1]]:
+            lf=1
+            if [ps[r][0],ps[r][1]+1]==[ps[n][0],ps[n][1]]:
+                up=1
+            elif [ps[r][0],ps[r][1]-1]==[ps[n][0],ps[n][1]]:
+                dn=1
+            elif [ps[r][0]+1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+                rt=1
+        elif [ps[r][0]-1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+            lf=1
+        elif [ps[r][0],ps[r][1]-1]==[ps[n][0],ps[n][1]]:
+            dn=1
+        elif [ps[r][0]+1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+            rt=1
+        elif [ps[r][0],ps[r][1]+1]==[ps[n][0],ps[n][1]]:
+            up=1
+    elif m==100:
+
+        if [ps[r][0]-1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+            lf=1
+        elif [ps[r][0],ps[r][1]-1]==[ps[n][0],ps[n][1]]:
+            dn=1
+        elif [ps[r][0]+1,ps[r][1]]==[ps[n][0],ps[n][1]]:
+            rt=1
+        elif [ps[r][0],ps[r][1]+1]==[ps[n][0],ps[n][1]]:
+            up=1
+    energy=int((energy/10)**(up+dn+rt+lf))
+    sample=[up,dn,rt,lf]
+    for i in range(energy):
+        sample.append(1)
+
+    rnd=random.sample(population=sample, k=1)
+
+    return(rnd)
+
+
+def endmv(ps,r):
+    h=0
+    v=0
+    uplf=0
+    dnlf=0
+    upr=0
+    dnr=0
+    if [ps[r][0]-1,ps[r][1]]==[ps[r-1][0],ps[r-1][1]]:
+
+        h=1
+    elif [ps[r][0]+1,ps[r][1]]==[ps[r-1][0],ps[r-1][1]]:
+        h=-1
+
+    elif [ps[r][0],ps[r][1]+1]==[ps[r-1][0],ps[r-1][1]]:
+        v=-1
+
+    elif [ps[r][0],ps[r][1]-1]==[ps[r-1][0],ps[r-1][1]]:
+        v=1
+
+    if h==1:
+        uplf=0
+        dnlf=0
+        for i in range(2,16):
+            if [ps[r][0]-1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+                uplf=1
+
+            if [ps[r][0]-1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+                dnlf=1
+
+        if dnlf==0 and uplf==0:
+            a=random.choice([[ps[r][0]-1,ps[r][1]-1],[ps[r][0]-1,ps[r][1]+1]])
+
+            ps[r]=a
+        elif dnlf==0:
+            ps[r]=[ps[r][0]-1,ps[r][1]-1]
+        elif uplf==0:
+            ps[r]=[ps[r][0]-1,ps[r][1]+1]
+
+    elif h==-1:
+        upr=0
+        dnr=0
+        for i in range(2,16):
+            if [ps[r][0]+1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+                upr=1
+            if [ps[r][0]+1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+                dnr=1
+        if upr==0 and dnr==0:
+            a=random.choice([[ps[r][0]+1,ps[r][1]+1],[ps[r][0]+1,ps[r][1]-1]])
+            ps[r]=a
+        elif upr==0:
+            ps[r]=[ps[r][0]+1,ps[r][1]+1]
+        elif dnr==0:
+            ps[r]=[ps[r][0]+1,ps[r][1]-1]
+
+
+    elif v==1:
+        dnlf=0
+        dnr=0
+        for i in range(2,16):
+            if [ps[r][0]-1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+                dnlf=1
+            if [ps[r][0]+1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+                dnr=1
+        if dnlf==0 and dnr==0:
+            a=random.choice([[ps[r][0]-1,ps[r][1]-1],[ps[r][0]+1,ps[r][1]-1]])
+            ps[r]=a
+
+        elif dnlf==0:
+            ps[r]=[ps[r][0]-1,ps[r][1]-1]
+        elif dnr==0:
+            ps[r]=[ps[r][0]+1,ps[r][1]-1]
+
+
+
+    elif v==-1:
+        uplf=0
+        upr=0
+        for i in range(2,16):
+            if [ps[r][0]-1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+
+                uplf=1
+            if [ps[r][0]+1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+                upr=1
+
+
+
+        print(uplf)
+        print(upr)
+        if upr==0 and uplf==0:
+
+            a=random.choice([[ps[r][0]+1,ps[r][1]+1],[ps[r][0]-1,ps[r][1]+1]])
+            ps[r]=a
+        elif upr==0:
+            ps[r]=[ps[r][0]+1,ps[r][1]+1]
+        elif uplf==0:
+            ps[r]=[ps[r][0]-1,ps[r][1]+1]
+
+def endmvf(ps):
+
+    psn=[]
+    for i in range(16):
+        psn.append(ps[len(ps)-1-i])
+
+    endmv(psn,len(psn)-1)
+
+    for i in range(16):
+        ps[i]=psn[len(psn)-1-i]
+
+    return ps
+
+def checkmv(ps,r,n,m,energy):
+    uplf =0
+    ups=0
+    upr=0
+    slf=0
+    sr=0
+    lrlf=0
+    lrr=0
+    lrs=0
+
+    for i in range(16):
+        if [ps[r][0]-1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+            uplf=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                uplf=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                uplf=3
+        elif [ps[r][0],ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+            ups=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                ups=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                ups=3
+        elif [ps[r][0]+1,ps[r][1]+1]==[ps[i][0],ps[i][1]]:
+            upr=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                upr=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                upr=3
+        elif [ps[r][0]+1,ps[r][1]]==[ps[i][0],ps[i][1]]:
+            sr=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                sr=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                sr=3
+        elif [ps[r][0]+1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+            lrr=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                lrr=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                lrr=3
+        elif [ps[r][0],ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+            lrs=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                lrs=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                lrs=3
+        elif [ps[r][0]-1,ps[r][1]-1]==[ps[i][0],ps[i][1]]:
+            lrlf=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                lrlf=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                lrlf=3
+        elif [ps[r][0]-1,ps[r][1]]==[ps[i][0],ps[i][1]]:
+            slf=1
+            if [ps[i][0],ps[i][1]]==[ps[r+1][0],ps[r+1][1]]:
+                slf=2
+            elif [ps[i][0],ps[i][1]]==[ps[r-1][0],ps[r-1][1]]:
+                slf=3
+
+
+    if ups==2 and slf==3:
+
+        if uplf==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,10)==[0]:
+                ps[r]=[ps[r][0]-1,ps[r][1]+1]
+
+    elif ups==3 and slf==2:
+
+        if uplf==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]-1,ps[r][1]+1]
+
+    elif ups==3 and sr==2:
+
+        if upr==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]+1,ps[r][1]+1]
+
+    elif ups==2 and sr==3:
+
+        if upr==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]+1,ps[r][1]+1]
+
+    elif lrs==3 and sr==2:
+
+        if lrr==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]+1,ps[r][1]-1]
+
+    elif lrs==2 and sr==3:
+
+        if lrr==0:
+            intn(ps,r,n,m,energy)
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]+1,ps[r][1]-1]
+
+
+    elif lrs==2 and slf==3:
+
+        if lrlf==0:
+            print(intn(ps,r,n,m,energy))
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]-1,ps[r][1]-1]
+
+    elif lrs==3 and slf==2:
+
+        if lrlf==0:
+            print(intn(ps,r,n,m,energy))
+            if intn(ps,r,n,m,energy)==[0]:
+                ps[r]=[ps[r][0]-1,ps[r][1]-1]
+
+    elif ups==3 and lrs==2:
+
+        ps=ps
+
+    else:
+        ps=ps
+
+
+
+    return(ps)
+
+pos=[]
+for i in range(5,21):
+    b=[]
+    b.append(i)
+    b.append(5)
+    pos.append(b)
+
+def pt_n(pos):
+    plt.axis([4,24, 0,20])
+
+
+    y=[]
+    x=[]
+    for i in range(16):
+        x.append(pos[i][0])
+        y.append(pos[i][1])
+
+    plt.plot(x, y, '-o')
+    plt.draw()
+    plt.pause(0.00001)
+    plt.clf()
+
+givenenergy=1000
+while(True):
+    a=intn(pos,0,3,11,givenenergy)
+    rndf=random.sample(population=a, k=1)
+    if rndf==[0]:
+        endmvf(pos)
+    pt_n(pos)
+    l=intn(pos,15,8,100,givenenergy)
+    if l==[0]:
+        endmv(pos,len(pos)-1)
+    pt_n(pos)
+    checkmv(pos,14,9,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,2,5,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,3,0,10,givenenergy)
+    pt_n(pos)
+    checkmv(pos,4,9,7,givenenergy)
+    pt_n(pos)
+    checkmv(pos,5,2,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,8,15,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,9,4,14,givenenergy)
+    pt_n(pos)
+    checkmv(pos,10,13,3,givenenergy)
+    pt_n(pos)
+    checkmv(pos,13,10,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,11,0,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,7,4,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,1,100,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,6,100,100,givenenergy)
+    pt_n(pos)
+    checkmv(pos,12,100,100,givenenergy)
+    pt_n(pos)
+
+
+
