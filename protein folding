@@ -1,4 +1,12 @@
 
+'''
+This is My course( Introduction to bioPhysical Chemistry) project, Here I have to display How 
+Protein fold from unflolded state.
+I am taking a 16 residue protein and considering end and crank-soft movement in protein, the movemet happend due to collisisn
+between micromocules within the cytoplasm.
+'''
+
+
 import matplotlib.pyplot as plt
 import random
 
